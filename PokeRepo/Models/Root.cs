@@ -1,10 +1,10 @@
-﻿
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace PokeRepo.Models
 {
     public class Root
     {
+
 
         [JsonProperty("abilities")]
         public List<Ability> Abilities { get; set; }
@@ -30,6 +30,4 @@ namespace PokeRepo.Models
         public int? Weight { get; set; }
 
     }
-
-
 }
