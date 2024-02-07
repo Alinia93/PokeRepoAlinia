@@ -30,4 +30,6 @@ namespace PokeRepo.Models
         public int? Weight { get; set; }
 
     }
+
+
 }
