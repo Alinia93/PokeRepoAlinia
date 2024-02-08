@@ -12,8 +12,8 @@ using PokeRepo.Data;
 namespace PokeRepo.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240207135539_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240207161056_first")]
+    partial class first
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace PokeRepo.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("PokeRepo.Models.AbilityDbModel", b =>
+            modelBuilder.Entity("PokeRepo.Models.Ability", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -42,28 +42,16 @@ namespace PokeRepo.Migrations
                     b.ToTable("Abilities");
                 });
 
-            modelBuilder.Entity("PokeRepo.Models.PokemonAbilityModel", b =>
-                {
-                    b.Property<int>("PokemonDbModelId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("AbilityDbModelId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PokemonDbModelId", "AbilityDbModelId");
-
-                    b.HasIndex("AbilityDbModelId");
-
-                    b.ToTable("PokemonAbilities");
-                });
-
-            modelBuilder.Entity("PokeRepo.Models.PokemonDbModel", b =>
+            modelBuilder.Entity("PokeRepo.Models.Pokemon", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("BaseExperience")
+                        .HasColumnType("int");
 
                     b.Property<int?>("Height")
                         .HasColumnType("int");
@@ -85,7 +73,22 @@ namespace PokeRepo.Migrations
                     b.ToTable("Pokemons");
                 });
 
-            modelBuilder.Entity("PokeRepo.Models.SpeciesDbModel", b =>
+            modelBuilder.Entity("PokeRepo.Models.PokemonAbility", b =>
+                {
+                    b.Property<int>("PokemonId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AbilityId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PokemonId", "AbilityId");
+
+                    b.HasIndex("AbilityId");
+
+                    b.ToTable("PokemonAbilities");
+                });
+
+            modelBuilder.Entity("PokeRepo.Models.Species", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -97,70 +100,54 @@ namespace PokeRepo.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PokemonId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("PokemonId");
 
                     b.ToTable("Species");
                 });
 
-            modelBuilder.Entity("PokeRepo.Models.PokemonAbilityModel", b =>
+            modelBuilder.Entity("PokeRepo.Models.Pokemon", b =>
                 {
-                    b.HasOne("PokeRepo.Models.AbilityDbModel", "AbilityDbModel")
-                        .WithMany("PokemonsAbility")
-                        .HasForeignKey("AbilityDbModelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PokeRepo.Models.PokemonDbModel", "PokemonDbModel")
-                        .WithMany("PokemonAbilityModels")
-                        .HasForeignKey("PokemonDbModelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AbilityDbModel");
-
-                    b.Navigation("PokemonDbModel");
-                });
-
-            modelBuilder.Entity("PokeRepo.Models.PokemonDbModel", b =>
-                {
-                    b.HasOne("PokeRepo.Models.SpeciesDbModel", "Species")
-                        .WithMany("PokemonDbModels")
+                    b.HasOne("PokeRepo.Models.Species", "Species")
+                        .WithMany("Pokemons")
                         .HasForeignKey("SpeciesId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Species");
                 });
 
-            modelBuilder.Entity("PokeRepo.Models.SpeciesDbModel", b =>
+            modelBuilder.Entity("PokeRepo.Models.PokemonAbility", b =>
                 {
-                    b.HasOne("PokeRepo.Models.PokemonDbModel", "Pokemon")
-                        .WithMany()
-                        .HasForeignKey("PokemonId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("PokeRepo.Models.Ability", "Ability")
+                        .WithMany("PokemonAbilities")
+                        .HasForeignKey("AbilityId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.HasOne("PokeRepo.Models.Pokemon", "Pokemon")
+                        .WithMany("PokemonAbilities")
+                        .HasForeignKey("PokemonId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Ability");
 
                     b.Navigation("Pokemon");
                 });
 
-            modelBuilder.Entity("PokeRepo.Models.AbilityDbModel", b =>
+            modelBuilder.Entity("PokeRepo.Models.Ability", b =>
                 {
-                    b.Navigation("PokemonsAbility");
+                    b.Navigation("PokemonAbilities");
                 });
 
-            modelBuilder.Entity("PokeRepo.Models.PokemonDbModel", b =>
+            modelBuilder.Entity("PokeRepo.Models.Pokemon", b =>
                 {
-                    b.Navigation("PokemonAbilityModels");
+                    b.Navigation("PokemonAbilities");
                 });
 
-            modelBuilder.Entity("PokeRepo.Models.SpeciesDbModel", b =>
+            modelBuilder.Entity("PokeRepo.Models.Species", b =>
                 {
-                    b.Navigation("PokemonDbModels");
+                    b.Navigation("Pokemons");
                 });
 #pragma warning restore 612, 618
         }
