@@ -16,7 +16,7 @@ namespace PokeRepo.Pages
                 PokemonRoot response = await new APIcaller().MakeCall<PokemonRoot>($"v2/pokemon/{name}");
                 Pokemon = response;
 
-                //string jsnStringResult = await response.Content.ReadAsStringAsync();
+
             }
             catch (Exception ex)
             {
