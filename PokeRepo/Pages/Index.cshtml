@@ -4,3 +4,9 @@
     ViewData["Title"] = "Home page";
 }
 
+
+@foreach(var result in Model.Results)
+{
+    <h1>@result.Name</h1>
+}
+

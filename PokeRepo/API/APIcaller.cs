@@ -10,18 +10,22 @@ namespace PokeRepo.API
         public APIcaller()
         {
             _client = new HttpClient();
-            _client.BaseAddress = new Uri("https://pokeapi.co/api/v2/");
+            _client.BaseAddress = new Uri("https://pokeapi.co/api/");
         }
 
-        public async Task<PokemonApiResponse> MakeCall(string url)
+        public async Task<Root> MakeCall(string url)
         {
             HttpResponseMessage response = await _client.GetAsync(url);
 
             if (response.IsSuccessStatusCode)
             {
                 string json = await response.Content.ReadAsStringAsync();
-                PokemonApiResponse result = JsonConvert.DeserializeObject<PokemonApiResponse>(json);
-                return result;
+                Root? result = JsonConvert.DeserializeObject<Root>(json);
+
+                if (result != null)
+                {
+                    return result;
+                }
             }
 
             throw new HttpRequestException("Failed to retrieve Pokemon data.");
