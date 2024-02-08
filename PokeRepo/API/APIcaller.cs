@@ -4,7 +4,7 @@ namespace PokeRepo.API
 {
     public class APIcaller
     {
-        // kommentar
+
         private readonly HttpClient _client;
 
         public APIcaller()
