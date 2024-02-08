@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using PokeRepo.Models;
 
 namespace PokeRepo.API
 {
@@ -12,14 +13,14 @@ namespace PokeRepo.API
             _client.BaseAddress = new Uri("https://pokeapi.co/api/");
         }
 
-        public async Task<T> MakeCall<T>(string url)
+        public async Task<Root> MakeCall(string url)
         {
             HttpResponseMessage response = await _client.GetAsync(url);
 
             if (response.IsSuccessStatusCode)
             {
                 string json = await response.Content.ReadAsStringAsync();
-                T? result = JsonConvert.DeserializeObject<T>(json);
+                Root? result = JsonConvert.DeserializeObject<Root>(json);
 
                 if (result != null)
                 {
