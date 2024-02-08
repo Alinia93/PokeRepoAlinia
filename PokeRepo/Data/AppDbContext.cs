@@ -10,25 +10,41 @@ namespace PokeRepo.Data
 
         }
 
-        public DbSet<PokemonDbModel> Pokemons { get; set; }
-        public DbSet<AbilityDbModel> Abilities { get; set; }
-        public DbSet<SpeciesDbModel> Species { get; set; }
-        public DbSet<PokemonAbilityModel> PokemonAbilities { get; set; }
+        public DbSet<Pokemon> Pokemons { get; set; }
+        public DbSet<Ability> Abilities { get; set; }
+        public DbSet<Species> Species { get; set; }
+        public DbSet<PokemonAbility> PokemonAbilities { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // Sätt upp many-to-many relationen (skapa en foreign key till båda klasserna) 
-            modelBuilder.Entity<PokemonAbilityModel>()
-            .HasKey(pa => new { pa.PokemonDbModelId, pa.AbilityDbModelId });
+            // 1:N (Pokemon-Species)
+            modelBuilder.Entity<Pokemon>()
+            .HasOne(p => p.Species)               // .HasOne - Varje Pokemon-entitet måste tillhöra EN Species
+            .WithMany(s => s.Pokemons)            // .WithMany - men varje Species kan ha flera (M) Pokemon. 
+            .HasForeignKey(p => p.SpeciesId)     // .HasForeignKey - Pokemon-entiteten bär på foreign key i relationen. 
+            .IsRequired()                        // .IsRequired - Varje Pokemon måste ha EN tillhörande Species. 
+             .OnDelete(DeleteBehavior.Restrict); // .OnDelete - När en Species raderas ska inga relaterade Pokemon raderas. 
 
-            modelBuilder.Entity<SpeciesDbModel>()
-       .HasMany(species => species.PokemonDbModels) // En specie kan ha många Pokémon
-       .WithOne(pokemon => pokemon.Species) // En Pokémon tillhör endast en specie
-       .HasForeignKey(pokemon => pokemon.SpeciesId); // Foreign key. 
+            // M:N (Pokemon-Ability) 
+            modelBuilder.Entity<PokemonAbility>()
+                .HasKey(pa => new { pa.PokemonId, pa.AbilityId });
+
+            modelBuilder.Entity<PokemonAbility>()
+                .HasOne(pa => pa.Pokemon)
+                .WithMany(p => p.PokemonAbilities)
+                .HasForeignKey(pa => pa.PokemonId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<PokemonAbility>()
+                .HasOne(pa => pa.Ability)
+                .WithMany(a => a.PokemonAbilities)
+                .HasForeignKey(pa => pa.AbilityId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.NoAction);
+
         }
-
-
     }
 }
