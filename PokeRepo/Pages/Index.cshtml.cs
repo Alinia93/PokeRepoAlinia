@@ -14,7 +14,7 @@ namespace PokeRepo.Pages
         {
             try
             {
-                Root response = await new APIcaller().MakeCall("v2/pokemon/");
+                Root response = await new APIcaller().MakeCall<Root>("v2/pokemon/");
                 Results = response.Results;
             }
             catch (Exception ex)

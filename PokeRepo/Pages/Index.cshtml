@@ -7,6 +7,8 @@
 
 @foreach(var result in Model.Results)
 {
-    <h1>@result.Name</h1>
+    <div id="PokemonDiv" class="border border-primary">
+   <a asp-page="/PokemonDetails" asp-route-name="@result.Name"> <h1>@result.Name</h1> </a>
+    </div>
 }
 
