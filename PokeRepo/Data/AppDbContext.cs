@@ -10,7 +10,7 @@ namespace PokeRepo.Data
 
         }
 
-        public DbSet<Pokemon> Pokemons { get; set; }
+        public DbSet<Pokemon1> Pokemons { get; set; }
         public DbSet<Ability> Abilities { get; set; }
         public DbSet<Species> Species { get; set; }
         public DbSet<PokemonAbility> PokemonAbilities { get; set; }
@@ -20,7 +20,7 @@ namespace PokeRepo.Data
             base.OnModelCreating(modelBuilder);
 
             // 1:N (Pokemon-Species)
-            modelBuilder.Entity<Pokemon>()
+            modelBuilder.Entity<Pokemon1>()
             .HasOne(p => p.Species)               // .HasOne - Varje Pokemon-entitet måste tillhöra EN Species
             .WithMany(s => s.Pokemons)            // .WithMany - men varje Species kan ha flera (M) Pokemon. 
             .HasForeignKey(p => p.SpeciesId)     // .HasForeignKey - Pokemon-entiteten bär på foreign key i relationen. 
