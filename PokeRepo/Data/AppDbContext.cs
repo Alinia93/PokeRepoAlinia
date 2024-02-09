@@ -9,6 +9,7 @@ namespace PokeRepo.Data
         {
 
         }
+        public int MyProperty { get; set; }
 
         public DbSet<PokemonDbModel> Pokemons { get; set; }
         public DbSet<AbilityDbModel> Abilities { get; set; }
