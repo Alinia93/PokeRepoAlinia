@@ -3,4 +3,19 @@
 @{
 }
 
-<h1>@Model.Pokemon.Name</h1>
+<div>
+
+    <h1>@Model.Pokemon.Name</h1>
+    <p>Species: @Model.Pokemon.Species.name</p>
+    <p>Heigt: @Model.Pokemon.Height</p>
+    <p>Weight: @Model.Pokemon.Weight</p>
+    <p>Base experience @Model.Pokemon.BaseExperience</p>
+
+    @foreach(var ability in Model.Pokemon.Abilities)
+    {
+        <p>Ability: @ability.ability.name</p>
+    }
+    <form method="post">
+        <button type="submit">Put pokemon in database</button>
+    </form>
+</div>

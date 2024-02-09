@@ -32,43 +32,25 @@ namespace PokeRepo.Models
 
 
     }
-
-    public class Pokemon1
-    {
-        public int Id { get; set; }
-        public string Name { get; set; } = null!;
-        public int? BaseExperience { get; set; }
-        public int? Height { get; set; }
-        public int? Weight { get; set; }
-
-        public int SpeciesId { get; set; }
-        public Species Species { get; set; } = null!;
-
-        public List<PokemonAbility>? PokemonAbilities { get; set; }
-    }
-
-    public class Ability
-    {
-        public int Id { get; set; }
-        public string Name { get; set; } = null!;
-
-        public List<PokemonAbility>? PokemonAbilities { get; set; }
-    }
-
-    public class PokemonAbility
-    {
-        public int PokemonId { get; set; }
-        public Pokemon1 Pokemon { get; set; } = null!;
-
-        public int AbilityId { get; set; }
-        public Ability Ability { get; set; } = null!;
-    }
-
-    public class Species
-    {
-        public int Id { get; set; }
-        public string Name { get; set; } = null!;
-
-        public List<Pokemon1> Pokemons { get; set; } = null!;
-    }
 }
+public class Ability
+{
+    public Ability2 ability { get; set; }
+    public bool is_hidden { get; set; }
+    public int slot { get; set; }
+}
+
+public class Ability2
+{
+    public string name { get; set; }
+    public string url { get; set; }
+}
+
+public class Species
+{
+    public string name { get; set; }
+    public string url { get; set; }
+}
+
+
+
